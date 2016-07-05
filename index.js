@@ -21,44 +21,7 @@ app.use(morgan('dev'));
 app.get('/', function(req, res) {
     res.send('Hello from Auth testing!');
 });
-app.get('/auth', function(req, res) {
-    User.findOne({
-        username: 'smar777'
-    }, function(err, user) {
-       /* console.log(user);
-        user.comparePassword('Password123', function(err, isMatch) {
-            if(err) {
-                console.log('wrong: ' + err);
-            } 
-            console.log(isMatch);
-        });
-        */
-        if (err) throw err;
 
-        if (!user) {
-            res.json({ success: false, message: 'Authentication failed. User not found.' });
-        } else if (user) {
-
-      // check if password matches
-           // if (user.password != 'Password123') {
-              //  res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-            //} else {
-
-        // if user is found and password is right
-        // create a token
-                var token = jwt.sign(user, app.get('superSecret'), {
-                    expiresIn: '2 days' // expires in 24 hours
-                });
-
-        // return the information including token as JSON
-                res.cookie('sessionToken', token);
-                res.send('You got a cookie!');
-            //}   
-
-        }
-
-    });
-});
 
 
 

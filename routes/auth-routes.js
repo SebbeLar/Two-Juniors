@@ -6,10 +6,7 @@ var express = require('express'),
 
 router.use(function(req, res, next) {
 
-  // check header or url parameters or post parameters for token
-  //var token = req.body.token || req.query.token || req.headers['x-access-token'];
     var token = req.cookies.sessionToken; 
-  // decode token
     if (token) {
 
     // verifies secret and checks exp
@@ -27,12 +24,52 @@ router.use(function(req, res, next) {
 
     // if there is no token
     // return an error
+    // TODO fix Redirect and message
         return res.status(403).send({ 
             success: false, 
             message: 'No token provided.' 
         });
     
     }
+});
+
+router.get('/auth', function(req, res) {
+    User.findOne({
+        username: 'smar777'
+    }, function(err, user) {
+       /* console.log(user);
+        user.comparePassword('Password123', function(err, isMatch) {
+            if(err) {
+                console.log('wrong: ' + err);
+            } 
+            console.log(isMatch);
+        });
+        */
+        if (err) throw err;
+
+        if (!user) {
+            res.json({ success: false, message: 'Authentication failed. User not found.' });
+        } else if (user) {
+
+      // check if password matches
+           // if (user.password != 'Password123') {
+              //  res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+            //} else {
+
+        // if user is found and password is right
+        // create a token
+                var token = jwt.sign(user, config.secret, {
+                    expiresIn: '2 days' // expires in 24 hours
+                });
+
+        // return the information including token as JSON
+                res.cookie('sessionToken', token);
+                res.send('You got a cookie!');
+            //}   
+
+        }
+
+    });
 });
 
 router.get('/', function(req, res) {
