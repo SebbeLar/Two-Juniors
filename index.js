@@ -22,9 +22,6 @@ app.get('/', function(req, res) {
     res.send('Hello from Auth testing!');
 });
 
-
-
-
 app.use('/api', AuthRoutes);
 
 app.listen(port, function() {
